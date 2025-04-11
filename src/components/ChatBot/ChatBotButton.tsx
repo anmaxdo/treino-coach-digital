@@ -16,7 +16,7 @@ const ChatBotButton = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
             className="absolute bottom-16 right-0 mb-2"
           >
             <ChatBotWindow onClose={() => setIsChatOpen(false)} />
@@ -29,16 +29,16 @@ const ChatBotButton = () => {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsChatOpen(!isChatOpen)}
         className={cn(
-          "w-14 h-14 rounded-full flex items-center justify-center shadow-lg",
+          "w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300",
           isChatOpen 
             ? "bg-red-500 hover:bg-red-600" 
             : "bg-trainer hover:bg-trainer-dark"
         )}
       >
         {isChatOpen ? (
-          <X className="text-white" size={24} />
+          <X className="text-white" size={26} />
         ) : (
-          <MessageCircle className="text-white animate-pulse-slow" size={24} />
+          <MessageCircle className="text-white animate-pulse-slow" size={26} />
         )}
       </motion.button>
     </div>

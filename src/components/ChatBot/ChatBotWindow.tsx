@@ -33,7 +33,7 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
       value: "desempenho" 
     },
     { 
-      text: "Recomendar conteúdo para meu crescimento", 
+      text: "Recomendar conteúdo", 
       value: "conteudo" 
     }
   ];
@@ -142,19 +142,19 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
 
   return (
     <motion.div 
-      className="bg-white rounded-lg shadow-xl w-[350px] sm:w-[400px] h-[500px] flex flex-col overflow-hidden"
+      className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[550px] flex flex-col overflow-hidden border border-gray-100"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
       {/* Header */}
-      <div className="bg-trainer p-4 text-white flex items-center justify-between">
+      <div className="bg-gradient-to-r from-trainer to-trainer-dark p-4 text-white flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8 bg-trainer-light">
-            <span className="text-trainer font-bold">T</span>
+          <Avatar className="h-10 w-10 bg-white border-2 border-white shadow-md">
+            <span className="text-trainer font-bold text-lg">T</span>
           </Avatar>
           <div>
-            <h3 className="font-bold">Treinador</h3>
-            <p className="text-xs text-trainer-light">Seu assistente de desempenho</p>
+            <h3 className="font-bold text-lg">Treinador</h3>
+            <p className="text-xs text-white/80">Seu assistente de desempenho</p>
           </div>
         </div>
       </div>
@@ -162,28 +162,39 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
       <Separator />
       
       {/* Messages container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-gradient-to-b from-gray-50 to-white">
         {messages.map((message) => (
-          <div key={message.id} className={cn("flex", !message.isBot && "justify-end")}>
+          <motion.div 
+            key={message.id} 
+            className={cn("flex", !message.isBot && "justify-end")}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <div 
               className={cn(
-                "max-w-[80%] rounded-lg p-3",
+                "max-w-[85%] rounded-2xl p-4",
                 message.isBot 
-                  ? "bg-white shadow-sm" 
+                  ? "bg-white shadow-md border border-gray-100" 
                   : "bg-trainer text-white"
               )}
             >
-              <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+              <div 
+                className="whitespace-pre-line text-sm" 
+                dangerouslySetInnerHTML={{ 
+                  __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>') 
+                }} 
+              />
               
               {/* Option chips */}
               {message.options && (
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-wrap gap-2 mt-4">
                   {message.options.map((option) => (
                     <Button 
                       key={option.value}
                       variant="outline"
                       size="sm"
-                      className="bg-trainer-light text-trainer hover:bg-trainer hover:text-white"
+                      className="bg-trainer-light text-trainer hover:bg-trainer hover:text-white transition-colors duration-300 rounded-full text-xs shadow-sm border-transparent"
                       onClick={() => handleOptionClick(option.value)}
                     >
                       {option.text}
@@ -192,7 +203,7 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
         <div ref={messagesEndRef} />
       </div>
@@ -200,7 +211,7 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
       <Separator />
       
       {/* Input area */}
-      <div className="p-3 bg-white flex items-center space-x-2">
+      <div className="p-4 bg-white flex items-center space-x-2">
         <Input
           ref={inputRef}
           type="text"
@@ -212,16 +223,19 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
               handleSendMessage();
             }
           }}
-          className="flex-1"
+          className="flex-1 rounded-full border-gray-200 focus-visible:ring-trainer focus-visible:ring-offset-1 focus-visible:ring-offset-trainer/10"
         />
         <Button 
           size="icon"
           variant="ghost" 
-          className="text-trainer hover:text-trainer-dark hover:bg-trainer-light"
+          className={cn(
+            "text-trainer hover:text-white hover:bg-trainer rounded-full transition-colors duration-300 shadow-sm",
+            inputValue.trim() ? "opacity-100" : "opacity-50"
+          )}
           onClick={() => handleSendMessage()}
           disabled={!inputValue.trim()}
         >
-          <Send size={20} />
+          <Send size={18} />
         </Button>
       </div>
     </motion.div>
