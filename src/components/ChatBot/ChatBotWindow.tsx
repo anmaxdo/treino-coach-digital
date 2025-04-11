@@ -1,8 +1,8 @@
 
 import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Send, User } from "lucide-react";
 import { motion } from "framer-motion";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -150,7 +150,7 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
       <div className="bg-gradient-to-r from-trainer to-trainer-dark p-4 text-white flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Avatar className="h-10 w-10 bg-white border-2 border-white shadow-md">
-            <span className="text-trainer font-bold text-lg">T</span>
+            <AvatarFallback className="text-trainer font-bold text-lg">T</AvatarFallback>
           </Avatar>
           <div>
             <h3 className="font-bold text-lg">Treinador</h3>
@@ -166,16 +166,30 @@ const ChatBotWindow = ({ onClose }: ChatBotWindowProps) => {
         {messages.map((message) => (
           <motion.div 
             key={message.id} 
-            className={cn("flex", !message.isBot && "justify-end")}
+            className={cn("flex items-start gap-3", !message.isBot && "flex-row-reverse")}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
+            {/* Avatar */}
+            {message.isBot ? (
+              <Avatar className="h-8 w-8 mt-1 bg-trainer text-white border-2 border-white shadow-sm flex-shrink-0">
+                <AvatarFallback className="font-bold text-sm">T</AvatarFallback>
+              </Avatar>
+            ) : (
+              <Avatar className="h-8 w-8 mt-1 bg-gray-100 border-2 border-white shadow-sm flex-shrink-0">
+                <AvatarFallback className="text-gray-500">
+                  <User size={16} />
+                </AvatarFallback>
+              </Avatar>
+            )}
+            
+            {/* Message bubble */}
             <div 
               className={cn(
-                "max-w-[85%] rounded-2xl p-4",
+                "max-w-[80%] rounded-2xl p-4",
                 message.isBot 
-                  ? "bg-white shadow-md border border-gray-100" 
+                  ? "bg-white border border-gray-100" 
                   : "bg-trainer text-white"
               )}
             >
